@@ -11,5 +11,10 @@
 
 (define str (file->string input-file))
 
-(display "floor ")
-(not-quite-lisp str)
+(display "final floor: ")
+(not-quite-lisp-part1 str)
+(newline)
+
+(display "basement position: ")
+(not-quite-lisp-part2 str)
+(newline)
