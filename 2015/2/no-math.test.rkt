@@ -31,6 +31,19 @@
        (surface-box+slack '(26 27 22))
        4308))
 
+    (test-case "take-2-smallest"
+      (check-equal?
+       (take-2-smallest '(61 37 52 13 52 48))
+       '(13 37)))
+
+    (test-case "ribbon-length"
+      (check-equal?
+       (ribbon-length '(2 3 4))
+       34)
+      (check-equal?
+       (ribbon-length '(1 1 10))
+       14))
+
     (test-case "total-surface"
       (check-equal?
        (total-surface '("2x3x4" "1x1x10"))

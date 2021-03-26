@@ -11,5 +11,8 @@
 
 (define lines (file->lines input-file))
 
-(display "total: ")
+(display "total wrapping paper: ")
 (total-surface lines)
+
+(display "total ribbon: ")
+(total-ribbon lines)
