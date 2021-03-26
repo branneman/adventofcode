@@ -35,6 +35,4 @@
       (check-equal?
        1 (not-quite-lisp-part2 ")"))
       (check-equal?
-       5 (not-quite-lisp-part2 "()())"))
-      )
-    ))
+       5 (not-quite-lisp-part2 "()())")))))
