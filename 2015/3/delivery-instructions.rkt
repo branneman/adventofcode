@@ -3,6 +3,8 @@
 (provide unique
          move
          delivery-run
+         unzip
+         count-deliveries
          app)
 
 (define (unique xs)
@@ -29,8 +31,29 @@
          '((0 0))
          instructions))
 
-(define app
-  (compose1 length
-            unique
-            delivery-run
-            string->list))
+(define (unzip xs)
+  (define (f a b xs)
+    (cond
+      [(= 1 (length xs))
+       (list (append a (list (car xs)))
+             b)]
+      [(= 0 (length xs))
+       (list a b)]
+      [else
+       (f (append a (list (car xs)))
+          (append b (list (cadr xs)))
+          (drop xs 2))]))
+  (f '() '() xs))
+
+(define count-deliveries
+  (compose length
+           unique
+           append))
+
+(define (app str)
+  (let* ([xs (string->list str)]
+         [split (unzip xs)]
+         [santa (car split)]
+         [robot (cadr split)])
+    (count-deliveries (delivery-run santa)
+                      (delivery-run robot))))
