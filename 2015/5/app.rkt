@@ -11,5 +11,8 @@
 
 (define lines (file->lines input-file))
 
-(display "number of nice strings: ")
-(app lines)
+(display "number of nice strings, part 1: ")
+(app nice-string-part1? lines)
+
+(display "number of nice strings, part 2: ")
+(app nice-string-part2? lines)
