@@ -8,7 +8,7 @@
          execute
          action->symbol
          parse
-         count-lit
+         sum-2d-vector
          app)
 
 (struct action (turn x1 y1 x2 y2) #:transparent)
@@ -27,11 +27,11 @@
 (define (flip-switch v turn)
   (cond
     [(equal? turn 'turn-on)
-     #t]
+     (+ v 1)]
     [(equal? turn 'turn-off)
-     #f]
+     (if (>= v 1) (- v 1) 0)]
     [(equal? turn 'toggle)
-     (if (false? v) #t #f)]))
+     (+ v 2)]))
 
 (define (execute grid a)
   (let ([x1 (action-x1 a)]
@@ -56,18 +56,13 @@
     (apply action (append (map action->symbol turn)
                           (map string->number digits)))))
 
-(define (count-lit grid)
-  (foldl (λ (curr acc)
-           (+ acc (foldl (λ (inner-curr inner-acc)
-                           (+ inner-acc
-                              (if (false? inner-curr) 0 1)))
-                         0
-                         (vector->list curr))))
+(define (sum-2d-vector grid)
+  (foldl (λ (curr acc) (+ acc (foldl + 0 (vector->list curr))))
          0
          (vector->list grid)))
 
 (define (app xs)
-  (define grid (make-grid 1000 #f))
+  (define grid (make-grid 1000 0))
   (for/list ([s xs])
     (execute grid (parse s)))
-  (count-lit grid))
+  (sum-2d-vector grid))
