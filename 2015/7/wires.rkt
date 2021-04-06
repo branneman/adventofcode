@@ -7,7 +7,8 @@
          operator->fn
          circuit
          solve
-         app)
+         app-part1
+         app-part2)
 
 (struct operation (operator operands wire) #:transparent)
 
@@ -79,5 +80,11 @@
                  (append (rest queue) (list (first queue))))))))
   (f (make-immutable-hash) (hash-values board)))
 
-(define (app xs)
+(define (app-part1 xs)
   (solve (circuit xs)))
+
+(define (app-part2 xs)
+  (solve (hash-set
+          (circuit xs)
+          "b"
+          (operation 'nop '(956) "b"))))

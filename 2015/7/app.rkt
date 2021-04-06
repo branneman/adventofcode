@@ -11,5 +11,8 @@
 
 (define lines (file->lines input-file))
 
-(display "signal at a: ")
-(hash-ref (app lines) "a")
+(display "signal at a (part 1): ")
+(hash-ref (app-part1 lines) "a")
+
+(display "signal at a (part 2): ")
+(hash-ref (app-part2 lines) "a")

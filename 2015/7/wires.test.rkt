@@ -108,15 +108,15 @@
              "e" 123
              "f" 123)))
 
-    (test-case "app"
+    (test-case "app-part1"
       (check-equal?
-       (app '("x -> y"
+       (app-part1 '("x -> y"
               "123 -> x"))
        (hash "x" 123
              "y" 123))
       
       (check-equal?
-       (app '("123 -> x"
+       (app-part1 '("123 -> x"
               "456 -> y"
               "x AND y -> d"
               "x OR y -> e"
@@ -134,7 +134,7 @@
              "y" 456))
       
       (check-equal?
-       (app '("x OR y -> e"
+       (app-part1 '("x OR y -> e"
               "NOT x -> h"
               "x LSHIFT 2 -> f"
               "y RSHIFT 2 -> g"
