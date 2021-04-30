@@ -12,4 +12,7 @@
 (define lines (file->lines input-file))
 
 (display "distance of winning reindeer: ")
-(displayln (app lines 2503))
+(displayln (winner-distance lines 2503))
+
+(display "points of winning reindeer: ")
+(displayln (winner-points lines 2503))
