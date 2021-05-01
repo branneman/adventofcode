@@ -13,3 +13,6 @@
 
 (display "total score of the highest-scoring cookie: ")
 (displayln (winning-cookie-score lines))
+
+(display "total score of the highest-scoring cookie with 500 calories: ")
+(displayln (winning-cookie-500-calories-score lines))
