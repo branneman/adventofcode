@@ -16,9 +16,37 @@
         'cars 2
         'perfumes 1))
 
+(define (match-prop? tt-prop match-prop)
+  (cond
+    [(or (and (equal? 'cats (car tt-prop))
+              (equal? 'cats (car match-prop)))
+         (and (equal? 'trees (car tt-prop))
+              (equal? 'trees (car match-prop))))
+     (> (cdr match-prop) (cdr tt-prop))]
+
+    [(or (and (equal? 'pomeranians (car tt-prop))
+              (equal? 'pomeranians (car match-prop)))
+         (and (equal? 'goldfish (car tt-prop))
+              (equal? 'goldfish (car match-prop))))
+     (< (cdr match-prop) (cdr tt-prop))]
+
+    [else
+     (equal? match-prop tt-prop)]))
+(module+ test
+  (test-case "match-prop?"
+    (check-false
+     (match-prop? '(cars 3) '(cats 3)))
+    (check-not-false
+     (match-prop? '(cars 3) '(cars 3)))
+    (check-false
+     (match-prop? '(cats 3) '(cars 2)))
+    (check-false
+     (match-prop? '(cats 3) '(cars 4)))))
+
 (define (match? x)
-  (andmap (λ (y) (findf (λ (z) (equal? y z))
-                        (hash->list ticker-tape)))
+  (andmap (λ (match-prop)
+            (findf (λ (tt-prop) (match-prop? tt-prop match-prop))
+                   (hash->list ticker-tape)))
           (hash->list (cadr x))))
 (module+ test
   (test-case "match?"
@@ -34,11 +62,14 @@
      (match? (list 1 (hash 'cars 7
                            'children 3
                            'goldfish 0))))
-    (check-not-false
+    (check-false
      (match? (list 1 (hash 'cats 7
                            'children 3
                            'goldfish 5))))
-    ))
+    (check-not-false
+     (match? (list 1 (hash 'cats 8
+                           'children 3
+                           'goldfish 4))))))
 
 (define (parse x)
   (let* ([l (cdr (regexp-match #px"Sue (\\d+): (.+)" x))]
