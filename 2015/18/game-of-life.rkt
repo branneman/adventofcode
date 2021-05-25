@@ -135,11 +135,12 @@
        '((4 4) (4 5))))))
 
 (define (next-state grid)
-  (for/vector ([x-grid grid]
-               [y (vector-length grid)])
-    (for/vector ([value x-grid]
-                 [x (vector-length x-grid)])
-      (next-state-point value (length (neighbours grid x y))))))
+  (stuck-corners
+   (for/vector ([x-grid grid]
+                [y (vector-length grid)])
+     (for/vector ([value x-grid]
+                  [x (vector-length x-grid)])
+       (next-state-point value (length (neighbours grid x y)))))))
 (module+ test
   (test-case "next-state"
     (check-equal?
@@ -149,12 +150,37 @@
                          (vector #f #f #t #f #f #f)
                          (vector #t #f #t #f #f #t)
                          (vector #t #t #t #t #f #f)))
-     (vector (vector #f #f #t #t #f #f)
+     (vector (vector #t #f #t #t #f #t)
              (vector #f #f #t #t #f #t)
              (vector #f #f #f #t #t #f)
              (vector #f #f #f #f #f #f)
              (vector #t #f #f #f #f #f)
-             (vector #t #f #t #t #f #f)))))
+             (vector #t #f #t #t #f #t)))))
+
+(define (vector-2d-set y-vec pos-x pos-y new-value)
+  (for/vector ([x-vec y-vec]
+               [y (vector-length y-vec)])
+    (for/vector ([value x-vec]
+                 [x (vector-length x-vec)])
+      (if (and (= x pos-x)
+               (= y pos-y))
+          new-value
+          value))))
+
+(define (stuck-corners grid)
+  (let ([n (sub1 (vector-length grid))])
+    (for/fold ([new-grid grid])
+              ([pos (list (list 0 0) (list 0 n) (list n 0) (list n n))])
+      (vector-2d-set new-grid (car pos) (cadr pos) #t))))
+(module+ test
+  (test-case "stuck-corners"
+    (check-equal?
+     (stuck-corners (vector (vector #f #f #f)
+                            (vector #f #f #f)
+                            (vector #f #f #f)))
+     (vector (vector #t #f #t)
+             (vector #f #f #f)
+             (vector #t #f #t)))))
 
 (define (parse-grid input-grid)
   (for/vector ([y input-grid])
