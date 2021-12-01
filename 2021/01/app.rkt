@@ -11,7 +11,7 @@
          [base (if (not dir) 'same dir)])
     (build-path base "input")))
 
-(define input-grid (parse (file->lines input-file)))
+(define input-grid (file->lines input-file))
 
-(display "number of increases: ")
-(displayln (count-increases input-grid))
+(display "number of increases in a three-measurement sliding window: ")
+(displayln (app input-grid))
