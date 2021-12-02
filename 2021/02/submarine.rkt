@@ -20,30 +20,40 @@
      '(("forward" 5)
        ("down" 5)))))
 
-(define (run pos depth xs)
+(define (run pos depth aim xs)
   (foldl (λ (curr acc)
-           (let ([p (car acc)]
-                 [d (cadr acc)]
-                 [direction (car curr)]
-                 [unit (cadr curr)])
+           (match-let ([(list p d a) acc]
+                       [(list direction unit) curr])
              (cond [(string=? direction "forward")
-                    (list (+ p unit) d)]
+                    (list (+ p unit)
+                          (+ d (* a unit))
+                          a)]
                    [(string=? direction "down")
-                    (list p (+ d unit))]
+                    (list p
+                          d
+                          (+ a unit))]
                    [(string=? direction "up")
-                    (list p (- d unit))])))
-         (list pos depth) ; init -> acc
+                    (list p
+                          d
+                          (- a unit))])))
+         (list pos depth aim) ; init -> acc
          xs))
 (module+ test
   (test-case "run"
     (check-equal?
-     (run 0 0 '(("forward" 5)))
-     '(5 0))))
+     (run 0 0 0 '(("forward" 5)))
+     '(5 0 0))
+    (check-equal?
+     (run 5 0 0 '(("down" 5)))
+     '(5 0 5))
+    (check-equal?
+     (run 5 0 5 '(("forward" 8)))
+     '(13 40 5))))
 
 (define app
   (compose1
-   (λ (xs) (apply * xs))
-   (λ (xs) (run 0 0 xs))
+   (λ (xs) (* (car xs) (cadr xs)))
+   (λ (xs) (run 0 0 0 xs))
    parse))
 (module+ test
   (test-case "app"
@@ -54,4 +64,4 @@
             "up 3"
             "down 8"
             "forward 2"))
-     150)))
+     900)))
