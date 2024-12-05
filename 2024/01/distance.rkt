@@ -4,7 +4,8 @@
  app)
 (require
   racket/string
-  racket/list)
+  racket/list
+  racket/function)
 (module+ test
   (require rackunit))
 
@@ -52,6 +53,6 @@
 
 (define app
   (compose
-   (λ (distances) (foldl + 0 distances))
-   (λ (pairs) (map distance pairs))
+   ((curry foldl) + 0)
+   ((curry map) distance)
    parse-into-lists))
